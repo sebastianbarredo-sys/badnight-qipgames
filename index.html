@@ -315,7 +315,9 @@ em.dlg{font-style:italic;color:var(--crema)}
 .tv-name{background:linear-gradient(90deg,var(--tv-a),#cdbdff 50%,var(--tv-c));-webkit-background-clip:text;background-clip:text;color:transparent}
 #tv.imagen .tv-head{flex-direction:column;gap:14px;font-size:11px;letter-spacing:.55em}
 .tv-orb{width:24px;height:24px;border-radius:50%;flex:none;position:relative;overflow:hidden;background:radial-gradient(circle at 35% 30%,#fff 0,var(--tv-a) 22%,var(--tv-b) 55%,#170f2b 82%);box-shadow:0 0 14px rgba(98,228,255,.5);animation:orbBreath 3.4s ease-in-out infinite}
-.tv-orb img{position:absolute;inset:-4%;width:108%;height:108%;object-fit:cover;mix-blend-mode:screen;animation:orbSpin 16s linear infinite}
+.tv-orb img{position:absolute;inset:-4%;width:108%;height:108%;object-fit:cover;mix-blend-mode:screen;animation:orbSpin 16s linear infinite;-webkit-mask-image:radial-gradient(circle,#000 60%,transparent 70%);mask-image:radial-gradient(circle,#000 60%,transparent 70%)}
+/* Safari no recorta con border-radius a un hijo animado con mix-blend (se veia un cuadrado detras del orbe) */
+.tv-orb{clip-path:circle(50%);isolation:isolate}
 #tv.imagen .tv-orb{width:clamp(84px,25cqw,124px);height:clamp(84px,25cqw,124px);box-shadow:0 0 50px rgba(98,228,255,.34),0 0 120px rgba(157,125,255,.28)}
 .tv-card.pensando .tv-orb{animation-duration:1.1s}
 @keyframes orbBreath{0%,100%{transform:scale(.95);filter:brightness(.95) saturate(1)}50%{transform:scale(1.05);filter:brightness(1.25) saturate(1.25)}}
@@ -505,7 +507,13 @@ const smokes=Array.from({length:22},()=>new Smoke);
 
 // ===== Escenas. En v3 los nombres, la lluvia y la fiesta estaban escritos para Mantis. Aca cada
 // escena decide solo que suena (music_scenes) y, si el contenido lo declara, su fondo (scene_bg).
-function setScene(s){hidePhotoInsert();scene=s;escenaAudio(s);setPhoto((CONTENT.scene_bg||{})[s]||null)}
+function setScene(s){const bg=(CONTENT.scene_bg||{})[s]||null;
+  if(!bg)limpiaFondo();      // primero se corta el fondo viejo; recien despues se saca la banda (26-09)
+  hidePhotoInsert();scene=s;escenaAudio(s);setPhoto(bg)}
+// Corta el fondo a negro sin fundido: nada de la escena anterior asoma cuando se quita la banda.
+function limpiaFondo(){pbgCur=null;
+  [pbgEls[0],pbgEls[1],pbgV].forEach(e=>{if(!e)return;e.style.transition='none';e.classList.remove('on');void e.offsetWidth;e.style.transition=''});
+  try{if(pbgV)pbgV.pause()}catch(e){}}
 // La marca se nota en el borde: una vineta del color del mood que late mas con cada marca.
 function drawMarcas(c,t){
   if(marcas>0){const k=marcas/MMAX,pulse=.5+.5*Math.sin(t*(2+marcas)),a=.05*k+.05*k*pulse;
@@ -1257,7 +1265,7 @@ function lecturaFor(key){
 }
 function showEnding(key,E){state='ending';hardCut();clearMovil();pagesOff();$('hud').classList.remove('show');
   $('beat').classList.remove('active');setSpeaker(null);
-  setPhoto(null);hidePhotoInsert();
+  limpiaFondo();hidePhotoInsert();
   E=E||{};
   const ci=$('card-img'),cbg=E.card_bg&&GHOST_IMGS[E.card_bg];
   if(cbg){ci.src=cbg;ci.style.display='block'}else ci.style.display='none';

@@ -88,11 +88,14 @@ canvas{position:fixed;top:0;left:0;width:100%;height:100%}
 #hud-marcas.gota i.gone{transform:rotate(45deg) scale(.22);opacity:.1;border-color:rgba(120,114,106,.2);box-shadow:none;transition:all .6s ease}
 .q-badge{font-weight:500;font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--dimmer);pointer-events:none;cursor:pointer}
 /* Puntaje (26-09): el engagement de TAVAIA se ve en la barra; el de Abril, solo en la tarjeta final */
-#hud-eng{display:none;align-items:baseline;gap:6px;font-weight:500;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);position:relative}
+#hud-eng{display:none;align-items:baseline;gap:7px;font-weight:500;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--crema);position:relative}
 #hud-eng.on{display:flex}
 #hud-row.con-eng .q-badge{display:none}
-#hud-eng em{font-style:normal;font-size:13px;letter-spacing:.5px;background:linear-gradient(90deg,var(--tv-a),var(--tv-b),var(--tv-c));-webkit-background-clip:text;background-clip:text;color:transparent;min-width:2ch;text-align:right}
-#hud-eng .delta{position:absolute;right:0;top:15px;font-size:11px;letter-spacing:.5px;animation:engDelta 1.6s ease-out forwards}
+#hud-eng em{display:inline-block;font-style:normal;font-size:19px;letter-spacing:.5px;background:linear-gradient(90deg,var(--tv-a),var(--tv-b),var(--tv-c));-webkit-background-clip:text;background-clip:text;color:transparent;min-width:2ch;text-align:right;filter:drop-shadow(0 0 6px rgba(98,228,255,.45))}
+/* cada cambio del puntaje hace saltar el numero: si no, nadie lo ve (26-09) */
+#hud-eng.pulso em{animation:engPop .6s ease}
+@keyframes engPop{0%{transform:scale(1)}30%{transform:scale(1.4)}100%{transform:scale(1)}}
+#hud-eng .delta{position:absolute;right:0;top:22px;font-size:14px;letter-spacing:.5px;animation:engDelta 1.6s ease-out forwards}
 #hud-eng .delta.sube{color:var(--tv-a)}
 #hud-eng .delta.baja{color:var(--danger)}
 @keyframes engDelta{0%{opacity:0;transform:translateY(-4px)}15%{opacity:1}100%{opacity:0;transform:translateY(10px)}}
@@ -1037,6 +1040,7 @@ function puntua(d,motivo){if(!PZ||!Array.isArray(d))return;const dT=d[0]||0,dA=d
   ptsT=Math.max(0,Math.min(100,ptsT+dT));ptsA=Math.max(0,Math.min(100,ptsA+dA));
   qpEv('pts',motivo+' '+dT+'/'+dA+' = '+ptsT+'/'+ptsA);
   $('hud-eng-n').textContent=ptsT;
+  if(dT){const h=$('hud-eng');h.classList.remove('pulso');void h.offsetWidth;h.classList.add('pulso')}
   if(dT){const x=document.createElement('span');x.className='delta '+(dT>0?'sube':'baja');x.textContent=(dT>0?'+':'')+dT;
     $('hud-eng').appendChild(x);setTimeout(()=>x.remove(),1700)}}
 // ===== Finales y logros (26-09). Quedan guardados en el telefono (localStorage): no hay servidor.

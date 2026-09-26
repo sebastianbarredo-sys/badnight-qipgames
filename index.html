@@ -767,8 +767,12 @@ function showPages(el,arr,cb,spd){
     if(i<pags.length){pinta();return}
     cerrar();if(cb)cb()}
   // La prueba toma el control de los toques; al terminar (bien, o despues de la pifia) se sigue.
+  // Como en las decisiones, perder no deja pasar: despues de la pifia la misma pagina vuelve y la
+  // prueba empieza de cero, con la ayuda del gesto otra vez (26-09, pedido de Sebastian).
   function pruebaDePagina(p){const yo=tok;pageTap=null;tapLayer(false);tapHint(false);
-    sostenerPrueba(p.sostener,()=>{if(yo!==tok)return;pageTap=onTap;tapLayer(true);avanza()})}
+    sostenerPrueba(p.sostener,ok=>{if(yo!==tok)return;pageTap=onTap;tapLayer(true);
+      if(ok){avanza();return}
+      sosVista=false;pinta()})}
   function cerrar(){tok++;pageTap=null;tapLayer(false);tapHint(false);el.classList.remove('done')}
   pageTap=onTap;tapLayer(true);
   pinta();
@@ -1047,7 +1051,7 @@ try{if(new URLSearchParams(location.search).get('reset_progreso')==='1')localSto
 function progresoLee(){try{const o=JSON.parse(localStorage.getItem(PG_CLAVE)||'{}');return (o&&typeof o==='object')?o:{}}catch(e){return {}}}
 function progresoGuarda(o){try{localStorage.setItem(PG_CLAVE,JSON.stringify(o))}catch(e){}}
 function logroCumple(c,key){
-  if(c==='sostener_todas')return sosTotal>0&&sosOk>=sosTotal;
+  if(c==='sostener_todas')return sosTotal>0&&sosOk>=sosTotal&&sosFallas===0;
   // los dos piden la partida entera: las seis decisiones pasadas (con ?salto= no cuentan)
   if(c==='sin_capturas')return capTotal===0&&aciertosTot>=BEATS.length;
   if(c==='sin_fallas')return fallasDecision===0&&aciertosTot>=BEATS.length;
@@ -1084,8 +1088,8 @@ function pintaProgreso(key){if(!PG)return;const pr=progresoLee();pr.finales=pr.f
 // el dedo esta apoyado. Soltar tiene un margen de GRACIA_MS para que un temblor no cuente como falla.
 // Mientras tanto, la presion sube: comentarios del LIVE o flashes cada vez mas seguidos y el latido
 // que se acelera. Si se suelta antes, pifia con su captura (S.fail) y despues se sigue igual.
-// Revision: ?sostener=ok|falla la resuelve sola a los 1,5 s.
-let sosVista=false;
+// Revision: ?sostener=ok|falla la resuelve sola a los 1,5 s; ?sostener=falla,ok, un intento por vez.
+let sosVista=false,sosFallas=0,sosAutoN=0;
 const GRACIA_MS=250;
 function sostenerPrueba(S,fin){
   const el=$('sostener'),fg=el.querySelector('.fg'),tx=el.querySelector('.sos-txt'),L=226.2;
@@ -1122,14 +1126,15 @@ function sostenerPrueba(S,fin){
     el.removeEventListener('pointerdown',baja);el.removeEventListener('pointerup',sube);el.removeEventListener('pointercancel',sube);
     el.removeEventListener('touchstart',nada);el.removeEventListener('contextmenu',nada);
     document.removeEventListener('keydown',tecla);document.removeEventListener('keyup',tecla)}
-  function gana(){suelta();el.classList.remove('apretando');el.classList.add('ok');qpEv('sostener-ok',bi);sosOk++;puntua(PZ&&PZ.sostener,'sostener');if(sosOk>=sosTotal)logroEnVivo('sostener_todas');
+  function gana(){suelta();el.classList.remove('apretando');el.classList.add('ok');qpEv('sostener-ok',bi);sosOk++;puntua(PZ&&PZ.sostener,'sostener');if(sosOk>=sosTotal&&!sosFallas)logroEnVivo('sostener_todas');
     playSfx('acierto',okTone);stopHB();musicUnder(false);
     setTimeout(()=>{el.className='';fin(true)},650)}
-  function pierde(){if(terminado)return;suelta();el.className='';qpEv('sostener-falla',bi);
+  function pierde(){if(terminado)return;suelta();el.className='';qpEv('sostener-falla',bi);sosFallas++;
     const f=S.fail||{},k=f.kind||'?';failsK[k]=(failsK[k]||0)+1;fallasBeat++;limpios=0;
     qpTrack('pifia',{q:bi,kind:k,by:'sostener'});musicUnder(false);
     golpe(f,()=>showCause(f,()=>addMarca(bi,()=>fin(false),f.captura)))}
-  const auto=(()=>{try{return new URLSearchParams(location.search).get('sostener')}catch(e){return null}})();
+  const auto=(()=>{try{const q=(new URLSearchParams(location.search).get('sostener')||'').split(',').filter(Boolean);
+    return q.length?q[Math.min(sosAutoN++,q.length-1)]:null}catch(e){return null}})();
   if(auto==='ok'){baja();setTimeout(()=>{acum=dur;paso()},1500)}
   else if(auto==='falla'){setTimeout(()=>{baja();setTimeout(sube,300)},1200)}
 }

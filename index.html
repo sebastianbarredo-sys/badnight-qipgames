@@ -452,8 +452,8 @@ em.dlg{font-style:italic;color:var(--crema)}
 #sostener.on{display:block}
 #sostener .sos-box{position:absolute;left:0;right:0;bottom:calc(26px + var(--sab));display:flex;flex-direction:column;align-items:center;gap:10px;pointer-events:none}
 #sostener .sos-ring{width:78px;height:78px;position:relative;transition:transform .2s ease}
-#sostener svg{width:100%;height:100%;transform:rotate(-90deg)}
-#sostener circle{fill:none;stroke-width:5}
+#sostener .sos-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+#sostener .sos-ring circle{fill:none;stroke-width:5}
 #sostener .bg{stroke:rgba(239,233,226,.2)}
 #sostener .fg{stroke:var(--accent-hot);stroke-linecap:round;stroke-dasharray:226.2;stroke-dashoffset:226.2}
 #sostener .sos-dedo{position:absolute;left:50%;top:50%;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;background:rgba(239,233,226,.85);box-shadow:0 0 18px rgba(255,106,77,.45);transition:transform .15s ease}
@@ -465,6 +465,41 @@ em.dlg{font-style:italic;color:var(--crema)}
 #sostener.apretando .sos-txt{opacity:.35}
 #sostener.ok .fg{stroke:#9be3b0}
 #sostener.ok .sos-dedo{background:#9be3b0}
+#sostener.triste .fg{stroke:var(--danger)}
+/* Risometro (27-09): la chapa de TAVAIA, arriba a la derecha bajo el engagement, mide la sonrisa
+   mientras se sostiene. La forma de la cara la mueve RISO; aca van colores y animaciones. */
+#sostener .sos-riso{position:absolute;top:calc(68px + var(--sat));right:14px;min-width:88px;padding:9px 10px 11px;border-radius:18px;display:flex;flex-direction:column;align-items:center;gap:7px;pointer-events:none;background:linear-gradient(rgba(12,9,10,.64),rgba(12,9,10,.64)) padding-box,linear-gradient(140deg,var(--tv-a),var(--tv-b),var(--tv-c)) border-box;border:1px solid transparent;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:risoEntra .5s ease}
+.sos-riso-t{font-family:var(--font-ui);font-weight:500;font-size:8px;letter-spacing:2.4px;text-transform:uppercase;color:var(--crema);opacity:.85;white-space:nowrap}
+.sos-cara{display:block;width:56px;height:56px;overflow:visible}
+.sos-cara .cab{fill:url(#risoGF);stroke:url(#risoGA);stroke-width:2}
+.sos-cara .tr,.sos-cara .boca{stroke:url(#risoGA);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.sos-cara .tr{fill:none}
+.sos-cara .boca{fill:rgba(157,125,255,.28)}
+.sos-cara .ojo{fill:url(#risoGA)}
+.sos-cara .rubor{fill:var(--tv-c);opacity:0}
+.sos-cara .gota{fill:#bfe6ff;opacity:0;animation:risoSudor 1.2s ease-in infinite}
+.sos-cara .lagrima{fill:#8fd3ff;opacity:0}
+.sos-cara .ojos{transform-box:fill-box;transform-origin:center;animation:risoParpadeo 3.4s infinite}
+#sostener.apretando .sos-cara .ojos,#sostener.triste .sos-cara .ojos{animation:none}
+#sostener.triste .sos-riso{background:linear-gradient(rgba(12,9,10,.64),rgba(12,9,10,.64)) padding-box,linear-gradient(140deg,var(--danger),var(--tv-c)) border-box;animation:risoNo .5s ease}
+#sostener.triste .sos-cara .cab,#sostener.triste .sos-cara .tr,#sostener.triste .sos-cara .boca{stroke:url(#risoGT)}
+#sostener.triste .sos-cara .ojo{fill:url(#risoGT)}
+#sostener.triste .sos-cara .lagrima{animation:risoLagrima 1.2s ease-in .05s forwards}
+#sostener.ok .sos-riso{animation:risoSi .65s ease}
+.sos-riso i{position:absolute;font-style:normal;font-size:11px;line-height:1;color:#fff;opacity:0;text-shadow:0 0 8px rgba(255,255,255,.8)}
+.sos-riso i:nth-of-type(1){left:-4px;top:18px}
+.sos-riso i:nth-of-type(2){right:-5px;top:30px;font-size:14px}
+.sos-riso i:nth-of-type(3){left:12px;bottom:-6px;font-size:9px}
+#sostener.ok .sos-riso i{animation:risoChispa .9s ease-out forwards}
+#sostener.ok .sos-riso i:nth-of-type(2){animation-delay:.08s}
+#sostener.ok .sos-riso i:nth-of-type(3){animation-delay:.16s}
+@keyframes risoEntra{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@keyframes risoParpadeo{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.12)}}
+@keyframes risoSudor{from{transform:translateY(-1px)}to{transform:translateY(2.5px)}}
+@keyframes risoLagrima{0%{opacity:0;transform:translateY(0)}18%{opacity:1}100%{opacity:0;transform:translateY(15px)}}
+@keyframes risoSi{0%{transform:scale(1)}35%{transform:scale(1.15)}65%{transform:scale(.97)}100%{transform:scale(1)}}
+@keyframes risoNo{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(4px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
+@keyframes risoChispa{0%{opacity:0;transform:scale(.2) rotate(0)}30%{opacity:1;transform:scale(1.25) rotate(40deg)}100%{opacity:0;transform:scale(.6) rotate(90deg)}}
 #tap-layer.on{display:block}
 /* El frame de causa: la pantalla quieta y la regla que se rompio, legible. */
 #cause{position:absolute;inset:0;z-index:26;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:0 34px;text-align:center;background:#060506;opacity:0;pointer-events:none;transition:opacity .3s ease}
@@ -484,7 +519,7 @@ em.dlg{font-style:italic;color:var(--crema)}
 <div class="beat" id="beat"><div class="beat-inner"><div id="speaker"><img id="speaker-img" alt=""><span id="speaker-name"></span></div><div class="slug" id="slug"></div><div class="scene-text" id="stext"></div><div class="choices" id="choices"><button class="choice-btn" data-i="0"></button><button class="choice-btn" data-i="1"></button><button class="choice-btn" data-i="2"></button></div><div id="tap-hint">toca para seguir</div></div></div>
 <div id="tap-layer"></div>
 <div id="toast"></div>
-<div id="sostener"><div class="sos-box"><div class="sos-ring"><svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="36"/><circle class="fg" cx="40" cy="40" r="36"/></svg><i class="sos-dedo"></i></div><div class="sos-txt"></div></div></div>
+<div id="sostener"><div class="sos-box"><div class="sos-ring"><svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="36"/><circle class="fg" cx="40" cy="40" r="36"/></svg><i class="sos-dedo"></i></div><div class="sos-txt"></div></div><div class="sos-riso"><div class="sos-riso-t"></div><svg class="sos-cara" viewBox="0 0 60 60"><defs><linearGradient id="risoGA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#62e4ff"/><stop offset=".5" stop-color="#9d7dff"/><stop offset="1" stop-color="#ff84d8"/></linearGradient><linearGradient id="risoGT" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff2b47"/><stop offset="1" stop-color="#ff84d8"/></linearGradient><radialGradient id="risoGF" cx=".5" cy=".4" r=".62"><stop offset="0" stop-color="#9d7dff" stop-opacity=".22"/><stop offset="1" stop-color="#0c090a" stop-opacity=".6"/></radialGradient></defs><circle class="cab" cx="30" cy="30" r="27"/><ellipse class="rubor" cx="15.5" cy="34.5" rx="4.3" ry="2.5"/><ellipse class="rubor" cx="44.5" cy="34.5" rx="4.3" ry="2.5"/><g class="ojos"><rect class="ojo" x="18.5" y="19.5" width="6" height="11" rx="3"/><rect class="ojo" x="35.5" y="19.5" width="6" height="11" rx="3"/></g><g class="feliz" style="opacity:0"><path class="tr" d="M17.3 26.8Q21.5 20.8 25.7 26.8"/><path class="tr" d="M34.3 26.8Q38.5 20.8 42.7 26.8"/></g><path class="boca" d="M19 39Q30 39 41 39Q30 39 19 39Z"/><path class="gota" d="M48 7.5Q51.6 12.8 48 15.3Q44.4 12.8 48 7.5Z"/><path class="lagrima" d="M21 30Q23.6 34.2 21 36.2Q18.4 34.2 21 30Z"/></svg><i>✦</i><i>✦</i><i>✦</i></div></div>
 <div id="ending"><div id="end-card"><div class="card-img"><img id="card-img" alt=""><div id="card-collage"></div></div><div class="card-body"><div class="end-estado-label" id="end-estado-label">Estado del jugador</div><div class="end-estado" id="end-estado"></div><div id="end-pts"><span class="t">TAVAIA<b id="end-pt"></b></span><span class="a">ABRIL<b id="end-pa"></b></span></div><div class="end-lectura" id="end-lectura"></div><div class="end-text" id="end-text"></div><div class="end-epi" id="end-epi"></div><div class="card-foot"><div><div class="cf-title">Bad Night</div><div class="cf-sub" id="card-brand"></div></div><div class="cf-qr" id="card-tag"></div></div></div></div><div id="share-hint">Hazle una captura · Enseña cómo has terminado</div></div>
 <div id="gdd-overlay"><div id="progreso"></div><div class="gdd-label" id="gdd-label"></div><div class="gdd-data-row" id="gdd-data"></div><div class="gdd-cierre" id="gdd-cierre"></div><div class="gdd-credits" id="gdd-credits"></div><div class="gdd-foot"><div class="gdd-outro" id="gdd-outro"></div><div class="foot-btns"><a id="feedback-btn" target="_blank" rel="noopener"></a><div id="restart-hint"></div></div></div></div>
 <div id="timer-count"></div>
@@ -1095,6 +1130,43 @@ function pintaProgreso(key){if(!PG)return;const pr=progresoLee();pr.finales=pr.f
 // Revision: ?sostener=ok|falla la resuelve sola a los 1,5 s; ?sostener=falla,ok, un intento por vez.
 let sosVista=false,sosFallas=0,sosAutoN=0;
 const GRACIA_MS=250;
+// Donde va el boton: debajo del texto si entra; si no (paginas con lugar a pantalla completa, como
+// el photocall), arriba del texto. Hasta el 27-09 tapaba el texto del photocall.
+function colocaSostener(){const el=$('sostener'),box=el.querySelector('.sos-box'),H=el.getBoundingClientRect().height;if(!H)return;
+  const r=document.createRange();r.selectNodeContents($('stext'));const t=r.getBoundingClientRect();
+  const fin=t.height?t.bottom:$('stext').getBoundingClientRect().bottom;
+  box.style.bottom='';
+  if(H-fin>=box.offsetHeight+parseFloat(getComputedStyle(box).bottom)+14)return;
+  const tops=['speaker','slug','stext'].map($).filter(e=>e&&e.offsetHeight&&e.textContent.trim()&&getComputedStyle(e).opacity!=='0').map(e=>e.getBoundingClientRect().top);
+  box.style.bottom=(H-(tops.length?Math.min(...tops):fin)+16)+'px'}
+// Risometro (27-09): la cara de la chapa de TAVAIA. Sonrie mas cuanto mas se sostiene, transpira
+// cuando ya es forzada, se entristece al soltar y festeja al ganar. m va de -1 (triste) a 1 (risa)
+// y se acerca sola a la meta de cada estado.
+const RISO=(()=>{
+  const w=$('sostener').querySelector('.sos-riso'),svg=w.querySelector('svg'),boca=svg.querySelector('.boca'),
+        ojos=svg.querySelector('.ojos'),feliz=svg.querySelector('.feliz'),ojo=svg.querySelectorAll('.ojo'),
+        rub=svg.querySelectorAll('.rubor'),gota=svg.querySelector('.gota');
+  const cl=x=>Math.max(0,Math.min(1,x)),f=x=>x.toFixed(2);
+  let m=0,meta=0,p=0,st='espera',raf=0,ult=0,col=0;
+  function dibuja(){const sm=Math.max(m,0),sd=Math.max(-m,0),t=st==='apretando'&&p>.6?(p-.6)*2.2:0,j=()=>t?(Math.random()-.5)*t*1.6:0;
+    const y=39-2*sm+4*sd,xl=19-3.5*sm+j(),xr=41+3.5*sm+j(),yl=y+j(),yr=y+j(),cu=y+(m>=0?16*m:12*m),ab=cl((m-.45)/.55);
+    boca.setAttribute('d','M'+f(xl)+' '+f(yl)+'Q30 '+f(cu)+' '+f(xr)+' '+f(yr)+'Q30 '+f(cu+ab*14)+' '+f(xl)+' '+f(yl)+'Z');
+    const k=cl((m-.55)/.25),a=16*sd,h=11-3.5*sd;ojos.style.opacity=String(1-k);feliz.style.opacity=String(k);
+    ojo[0].setAttribute('transform','rotate('+f(a)+' 21.5 25)');ojo[1].setAttribute('transform','rotate('+f(-a)+' 38.5 25)');
+    ojo.forEach(r=>{r.setAttribute('height',f(h));r.setAttribute('y',f(25-h/2))});
+    rub.forEach(r=>r.style.opacity=String(.55*cl((m-.5)/.5)));
+    gota.style.opacity=String(st==='apretando'?cl((p-.45)/.2):0);
+    svg.style.filter='drop-shadow(0 0 '+f(2+6*sm)+'px rgba(157,125,255,'+f(.2+.35*sm)+'))'}
+  function cuadro(ts){const dt=Math.min(120,Math.max(0,ts-ult));ult=ts;
+    if(st==='apretando'||Math.abs(meta-m)>.002){m+=(meta-m)*Math.min(1,dt/(meta<m?70:110));dibuja()}
+    if(ts-col>300){col=ts;colocaSostener()}   // el texto puede seguir acomodandose al empezar
+    raf=requestAnimationFrame(cuadro)}
+  return{
+    inicia(tit){w.querySelector('.sos-riso-t').textContent=tit;m=meta=p=0;st='espera';col=0;
+      cancelAnimationFrame(raf);ult=performance.now();dibuja();raf=requestAnimationFrame(cuadro)},
+    pon(s,pr){st=s;if(pr!==undefined)p=pr;meta=s==='apretando'?.18+.82*(1-(1-p)*(1-p)):({espera:0,soltando:-.75,triste:-1,feliz:1})[s]},
+    para(){cancelAnimationFrame(raf)}};
+})();
 function sostenerPrueba(S,fin){
   const el=$('sostener'),fg=el.querySelector('.fg'),tx=el.querySelector('.sos-txt'),L=226.2;
   const dur=Math.max(1,S.segundos||4)*1000,coms=(S.comentarios||[]).slice();
@@ -1102,11 +1174,12 @@ function sostenerPrueba(S,fin){
   tx.textContent=S.indicacion||'Mantén pulsado para sostener la sonrisa';
   fg.style.strokeDashoffset=L;
   el.className='on'+(sosVista?'':' primera');sosVista=true;
+  RISO.inicia(S.medidor||'Risómetro');colocaSostener();
   qpEv('sostener',bi);startHB(78);musicUnder(true);
   function paso(){if(terminado||!apoyado)return;
     // reloj real y tope de 120 ms por cuadro: si el telefono se traba, el anillo no salta de golpe
     const ts=performance.now();acum+=Math.min(120,Math.max(0,ts-ultimo));ultimo=ts;
-    const pr=Math.min(1,acum/dur);fg.style.strokeDashoffset=String(L*(1-pr));
+    const pr=Math.min(1,acum/dur);fg.style.strokeDashoffset=String(L*(1-pr));RISO.pon('apretando',pr);
     hbBpm2=78+Math.round(pr*56);
     if(ts>=prox){
       if(S.estilo==='flashes'){destellos([0],[.5]);playSfx('obturadores',null,.3)}
@@ -1115,11 +1188,11 @@ function sostenerPrueba(S,fin){
     if(pr>=1){gana();return}
     raf=requestAnimationFrame(paso)}
   function baja(e){if(terminado)return;if(e&&e.cancelable)e.preventDefault();
-    if(soltadoT){clearTimeout(soltadoT);soltadoT=0}
-    if(apoyado)return;apoyado=true;el.classList.add('apretando');el.classList.remove('primera');
+    if(soltadoT){clearTimeout(soltadoT);soltadoT=0;el.classList.remove('soltando')}
+    if(apoyado)return;apoyado=true;el.classList.add('apretando');el.classList.remove('primera');RISO.pon('apretando',acum/dur);
     ultimo=performance.now();if(!prox)prox=ultimo;raf=requestAnimationFrame(paso)}
   function sube(e){if(terminado||!apoyado)return;if(e&&e.cancelable)e.preventDefault();
-    apoyado=false;cancelAnimationFrame(raf);el.classList.remove('apretando');
+    apoyado=false;cancelAnimationFrame(raf);el.classList.remove('apretando');el.classList.add('soltando');RISO.pon('soltando');
     soltadoT=setTimeout(pierde,GRACIA_MS)}
   const nada=e=>{if(e.cancelable)e.preventDefault()};
   const tecla=e=>{if(e.code!=='Space'&&e.key!==' ')return;e.preventDefault();if(e.type==='keydown'){if(!e.repeat)baja()}else sube()};
@@ -1130,13 +1203,13 @@ function sostenerPrueba(S,fin){
     el.removeEventListener('pointerdown',baja);el.removeEventListener('pointerup',sube);el.removeEventListener('pointercancel',sube);
     el.removeEventListener('touchstart',nada);el.removeEventListener('contextmenu',nada);
     document.removeEventListener('keydown',tecla);document.removeEventListener('keyup',tecla)}
-  function gana(){suelta();el.classList.remove('apretando');el.classList.add('ok');qpEv('sostener-ok',bi);sosOk++;puntua(PZ&&PZ.sostener,'sostener');if(sosOk>=sosTotal&&!sosFallas)logroEnVivo('sostener_todas');
+  function gana(){suelta();el.classList.remove('apretando','soltando');el.classList.add('ok');RISO.pon('feliz');qpEv('sostener-ok',bi);sosOk++;puntua(PZ&&PZ.sostener,'sostener');if(sosOk>=sosTotal&&!sosFallas)logroEnVivo('sostener_todas');
     playSfx('acierto',okTone);stopHB();musicUnder(false);
-    setTimeout(()=>{el.className='';fin(true)},650)}
-  function pierde(){if(terminado)return;suelta();el.className='';qpEv('sostener-falla',bi);sosFallas++;
+    setTimeout(()=>{el.className='';RISO.para();fin(true)},900)}
+  function pierde(){if(terminado)return;suelta();el.classList.remove('apretando','soltando','primera');el.classList.add('triste');RISO.pon('triste');qpEv('sostener-falla',bi);sosFallas++;
     const f=S.fail||{},k=f.kind||'?';failsK[k]=(failsK[k]||0)+1;fallasBeat++;limpios=0;
     qpTrack('pifia',{q:bi,kind:k,by:'sostener'});musicUnder(false);
-    golpe(f,()=>showCause(f,()=>addMarca(bi,()=>fin(false),f.captura)))}
+    setTimeout(()=>{el.className='';RISO.para();golpe(f,()=>showCause(f,()=>addMarca(bi,()=>fin(false),f.captura)))},700)}
   const auto=(()=>{try{const q=(new URLSearchParams(location.search).get('sostener')||'').split(',').filter(Boolean);
     return q.length?q[Math.min(sosAutoN++,q.length-1)]:null}catch(e){return null}})();
   if(auto==='ok'){baja();setTimeout(()=>{acum=dur;paso()},1500)}
